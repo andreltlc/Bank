@@ -1,151 +1,151 @@
+import textwrap
 def menu(): 
    menu = """\n
    =============== MENU ===============
-     [1]\tDepositar
-     [2]\tSacar
-     [3]\tExtrato
-     [4]\tNovo Usuário
-     [5]\tNova Conta
-     [6]\tListar Contas
-     [7]\tSair
+     [1]\tPut
+     [2]\tWithdraw
+     [3]\tBankStatement
+     [4]\tNew User
+     [5]\tNew Account
+     [6]\tList Accounts
+     [7]\tExit
    ===================================
    => """
    return input(textwrap.dedent(menu))
 
-def depositar(saldo, valor, extrato, /):
-    if valor > 0:
-        saldo += valor
-        extrato += f"Depósito:\tR$ {valor:.2f}\n"
-        print("\n=== Depósito realizado com sucesso! ===")
+def Put(Balance, Value, BankStatement, /):
+    if Value > 0:
+        Balance += Value
+        BankStatement += f"Deposit:\tR$ {Value:.2f}\n"
+        print("\n=== Deposit made successfully! ===")
     else:
-        print("\n@@@ Operação falhou! O valor informado é inválido. @@@")
+        print("\n@@@ Operation failed! The value entered is invalid. @@@")
 
-    return saldo, extrato
+    return Balance, BankStatement
 
-def sacar(*, saldo, valor, extrato, limite, numero_saques, limite_saques):
-    excedeu_saldo = valor > saldo
-    excedeu_limite = valor > limite
-    excedeu_saques = numero_saques >= limite_saques
+def Withdraw(*, Balance, Value, BankStatement, Bound, NumberWithdraw, Bound_Withdraw):
+    ExcededBalance = Value > Balance
+    ExcededBound = Value > Bound
+    ExcededWithdraw = NumberWithdraw >= Bound_Withdraw
 
-    if excedeu_saldo:
-        print("\n@@@ Operação falhou! Você não tem saldo suficiente. @@@")
+    if ExcededBalance:
+        print("\n@@@ Operation failed! You do not have enough Balance. @@@")
 
-    elif excedeu_limite:
-        print("\n@@@ Operação falhou! O valor do saque excede o limite. @@@")
+    elif ExcededBound:
+        print("\n@@@ Operation failed! Withdrawal amount exceeds Bound. @@@")
 
-    elif excedeu_saques:
-        print("\n@@@ Operação falhou! Número máximo de saques excedido. @@@")
+    elif ExcededWithdraw:
+        print("\n@@@ Operation failed! Maximum number of Withdraws exceeded. @@@")
 
-    elif valor > 0:
-        saldo -= valor
-        extrato += f"Saque:\t\tR$ {valor:.2f}\n"
-        numero_saques += 1
-        print("\n=== Saque realizado com sucesso! ===")
+    elif Value > 0:
+        Balance -= Value
+        BankStatement += f"Withdraw:\t\tR$ {Value:.2f}\n"
+        NumberWithdraw += 1
+        print("\n=== Withdraw successfully completed! ===")
 
     else:
-        print("\n@@@ Operação falhou! O valor informado é inválido. @@@")
 
-    return saldo, extrato
+        return Balance, BankStatement
 
-def exibir_extrato(saldo, /, *, extrato):
-    print("\n================ EXTRATO ================")
-    print("Não foram realizadas movimentações." if not extrato else extrato)
-    print(f"\nSaldo:\t\tR$ {saldo:.2f}")
+def exibir_BankStatement(Balance, /, *, BankStatement):
+    print("\n================ BankStatement ================")
+    print("No movements were made." if not BankStatement else BankStatement)
+    print(f"\nBalance:\t\tR$ {Balance:.2f}")
     print("==========================================")
 
-def criar_usuario(usuarios):
-    cpf = input("Informe o CPF (somente número): ")
-    usuario = filtrar_usuario(cpf, usuarios)
+def CreateUser(Users):
+    cpf = input("Enter your CPF (number only): ")
+    User = FilterUser(cpf, Users)
 
-    if usuario:
-        print("\n@@@ Já existe usuário com esse CPF! @@@")
+    if User:
+        print("\n@@@ There is already a user with this CPF! @@@")
         return
 
-    nome = input("Informe o nome completo: ")
-    data_nascimento = input("Informe a data de nascimento (dd-mm-aaaa): ")
-    endereco = input("Informe o endereço (logradouro, nro - bairro - cidade/sigla estado): ")
+    Name = input("Enter your full name: ")
+    DateOfBirth = input("Enter your date of birth (dd-mm-yyyy): ")
+    Address = input("Enter the address (street, number - neighborhood - city/state abbreviation): ")
 
-    usuarios.append({"nome": nome, "data_nascimento": data_nascimento, "cpf": cpf, "endereco": endereco})
+    Users.append({"Name": Name, "DateOfBirth": DateOfBirth, "cpf": cpf, "Address": Address})
 
-    print("=== Usuário criado com sucesso! ===")
+    print("=== User created successfully! ===")
 
-def filtrar_usuario(cpf, usuarios):
-    usuarios_filtrados = [usuario for usuario in usuarios if usuario["cpf"] == cpf]
-    return usuarios_filtrados[0] if usuarios_filtrados else None
+def FilterUser(cpf, Users):
+    UsersFiltered = [User for User in Users if User["cpf"] == cpf]
+    return UsersFiltered[0] if UsersFiltered else None
 
-def criar_conta(agencia, numero_conta, usuarios):
-    cpf = input("Informe o CPF do usuário: ")
-    usuario = filtrar_usuario(cpf, usuarios)
+def CreateAccount(Agency, AccountNumber, Users):
+    cpf = input("Enter the user's CPF: ")
+    User = FilterUser(cpf, Users)
 
-    if usuario:
-        print("\n=== Conta criada com sucesso! ===")
-        return {"agencia": agencia, "numero_conta": numero_conta, "usuario": usuario}
+    if User:
+        print("\n=== Account created successfully! ===")
+        return {"Agency": Agency, "AccountNumber": AccountNumber, "User": User}
 
-    print("\n@@@ Usuário não encontrado, fluxo de criação de conta encerrado! @@@")
+    print("\n@@@ User not found, Account creation flow closed! @@@")
 
-def listar_contas(contas):
-    for conta in contas:
-        linha = f"""\
-            Agência:\t{conta['agencia']}
-            C/C:\t\t{conta['numero_conta']}
-            Titular:\t{conta['usuario']['nome']}
+def listar_Accounts(Accounts):
+    for Account in Accounts:
+        Line = f"""\
+            Agência:\t{Account['Agency']}
+            C/C:\t\t{Account['AccountNumber']}
+            Titular:\t{Account['User']['Name']}
         """
         print("=" * 100)
-        print(textwrap.dedent(linha))
+        print(textwrap.dedent(Line))
 
 def main():
-    LIMITE_SAQUES = 3
-    AGENCIA = "0001"
+    Bound_Withdraw = 3
+    Agency = "0001"
 
-    saldo = 0
-    limite = 500
-    extrato = ""
-    numero_saques = 0
-    usuarios = []
-    contas = []
+    Balance = 0
+    Bound = 500
+    BankStatement = ""
+    NumberWithdraw = 0
+    Users = []
+    Accounts = []
 
 
     while True:
 
-        opcao = menu()
+        Option = menu()
 
-        if opcao == "1":
-            valor = float(input("Informe o valor do depósito: "))
+        if Option == "1":
+            Value = float(input("Enter the Deposit Value: "))
 
-            saldo, extrato = depositar(saldo, valor, extrato)
+            Balance, BankStatement = Put(Balance, Value, BankStatement)
 
-        elif opcao == "2":
-           valor = float(input("Informe o valor do saque: ")) 
+        elif Option == "2":
+           Value = float(input("Enter the Withdraw Value: ")) 
 
-           saldo, extrato = sacar(
-                saldo=saldo,
-                valor=valor,
-                extrato=extrato,
-                limite=limite,
-                numero_saques=numero_saques,
-                limite_saques=LIMITE_SAQUES,
+           Balance, BankStatement = Withdraw(
+                Balance=Balance,
+                Value=Value,
+                BankStatement=BankStatement,
+                Bound=Bound,
+                NumberWithdraw=NumberWithdraw,
+                Bound_Withdraw=Bound_Withdraw,
             )
 
-        elif opcao == "3":
-           exibir_extrato(saldo, extrato=extrato) 
+        elif Option == "3":
+           exibir_BankStatement(Balance, BankStatement=BankStatement) 
 
-        elif opcao == "4":
-           criar_usuario(usuarios)  
+        elif Option == "4":
+           CreateUser(Users)  
 
-        elif opcao == "5":
-           numero_conta = len(contas) + 1
-           conta = criar_conta(AGENCIA, numero_conta, usuarios)
+        elif Option == "5":
+           AccountNumber = len(Accounts) + 1
+           Account = CreateAccount(Agency, AccountNumber, Users)
 
-           if conta:
-               contas.append(conta)
+           if Account:
+               Accounts.append(Account)
 
-        elif opcao == "6":
-           listar_contas(contas)        
+        elif Option == "6":
+           listar_Accounts(Accounts)        
     
-        elif opcao == "7":
+        elif Option == "7":
            break    
 
         else:
-           print("Operação inválida, por favor selecione novamente a operação desejada.")
+           print("Invalid operation, please reselect the desired operation.")
 
 main()   
